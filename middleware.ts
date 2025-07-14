@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { rootDomain } from "@/internals/utils";
+import { rootDomains } from "@/internals/utils";
 
 function extractSubdomain(request: NextRequest): string | null {
   const url = request.url;
@@ -22,24 +22,33 @@ function extractSubdomain(request: NextRequest): string | null {
     return null;
   }
 
-  // Production environment
-  const rootDomainFormatted = rootDomain.split(":")[0];
-
   // Handle preview deployment URLs (tenant---branch-name.vercel.app)
   if (hostname.includes("---") && hostname.endsWith(".vercel.app")) {
     const parts = hostname.split("---");
     return parts.length > 0 ? parts[0] : null;
   }
 
-  // Regular subdomain detection
-  const isSubdomain =
-    hostname !== rootDomainFormatted &&
-    hostname !== `www.${rootDomainFormatted}` &&
-    hostname.endsWith(`.${rootDomainFormatted}`);
+  // Find the matching root domain from our list
+  const matchingRootDomain = rootDomains.find((domain) => {
+    return hostname.includes(domain);
+  });
 
-  console.log("extractSubdomain", isSubdomain, rootDomainFormatted);
+  if (matchingRootDomain) {
+    // Production environment - check for current hostname
+    const rootDomainFormatted = matchingRootDomain.split(":")[0];
 
-  return isSubdomain ? hostname.replace(`.${rootDomainFormatted}`, "") : null;
+    // Regular subdomain detection
+    const isSubdomain =
+      hostname !== rootDomainFormatted &&
+      hostname !== `www.${rootDomainFormatted}` &&
+      hostname.endsWith(`.${rootDomainFormatted}`);
+
+    console.log("extractSubdomain", isSubdomain, rootDomainFormatted);
+
+    return isSubdomain ? hostname.replace(`.${rootDomainFormatted}`, "") : null;
+  }
+
+  return null;
 }
 
 export async function middleware(request: NextRequest) {
