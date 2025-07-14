@@ -11,6 +11,10 @@ function extractDomainInfo(request: NextRequest): DomainInfo {
   const host = request.headers.get("host") || "";
   const hostname = host.split(":")[0];
 
+  if (hostname.includes("localhost")) {
+    return { subdomain: null, rootDomain: host };
+  }
+
   if (hostname.includes("---") && hostname.endsWith(".vercel.app")) {
     const parts = hostname.split("---");
     return {
@@ -81,6 +85,10 @@ export async function middleware(request: NextRequest) {
 
     // biome-ignore lint/style/noUselessElse: readability
   } else {
+    if (rootDomain.includes("localhost")) {
+      return NextResponse.next();
+    }
+
     // --- Logic for requests on a root domain (no subdomain) ---
     // don't let people manually go to the hostnameSpecific routes
     if (pathname.startsWith("/hostnameSpecific")) {
