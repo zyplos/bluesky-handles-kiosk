@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { protocol, rootDomains } from "@/internals/utils";
+import { rootDomains } from "@/internals/utils";
 
 interface DomainInfo {
   subdomain: string | null;
@@ -41,8 +41,8 @@ function extractDomainInfo(request: NextRequest): DomainInfo {
   notes
 
   /                          | hostnameSpecific/[rootDomain]/page.ts                | show splash image with discord login somewhere
-  /dashboard                 | dashboard/page.ts                   | let people input their bluesky did here
   /.well-known/atproto-did   | hostnameSpecific/[rootDomain]/[subdomain]/route.ts   | send plain text response with user's bluesky did
+  /dashboard                 | dashboard/page.ts                                    | let people input their bluesky did here
 
 */
 
@@ -78,6 +78,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(
       new URL("/.well-known/atproto-did", request.url)
     );
+
     // biome-ignore lint/style/noUselessElse: readability
   } else {
     // --- Logic for requests on a root domain (no subdomain) ---
@@ -92,11 +93,6 @@ export async function middleware(request: NextRequest) {
         new URL(`/hostnameSpecific/${rootDomain}`, request.url)
       );
     }
-
-    // Rewrite to the main dashboard page.
-    // if (pathname === "/dashboard") {
-    //   return NextResponse.rewrite(new URL("/dashboard", request.url));
-    // }
   }
 
   // Allow all other requests to proceed without a rewrite.
