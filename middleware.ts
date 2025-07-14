@@ -68,11 +68,16 @@ export async function middleware(request: NextRequest) {
   if (subdomain && rootDomain) {
     // For a subdomain, both the root path and the atproto-did path
     // should resolve to the user's public DID document.
-    if (pathname === "/" || pathname === "/.well-known/atproto-did") {
+    if (pathname === "/.well-known/atproto-did") {
       return NextResponse.rewrite(
         new URL(`/hostnameSpecific/${rootDomain}/${subdomain}`, request.url)
       );
     }
+
+    // visiting with a valid rootDomain and a subdomain should always take you to well-known
+    return NextResponse.redirect(
+      new URL("/.well-known/atproto-did", request.url)
+    );
   }
 
   // --- Logic for requests on a root domain (no subdomain) ---
