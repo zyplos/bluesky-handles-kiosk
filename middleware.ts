@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { rootDomains } from "@/internals/utils";
+import { protocol, rootDomains } from "@/internals/utils";
 
 interface DomainInfo {
   subdomain: string | null;
@@ -49,6 +49,18 @@ function extractDomainInfo(request: NextRequest): DomainInfo {
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const { subdomain, rootDomain } = extractDomainInfo(request);
+
+  // If the request's hostname is not in our configured rootDomains,
+  // redirect it to the root path of that same hostname.
+  if (!rootDomain) {
+    // We add a check for `pathname !== "/"` to prevent a redirect loop.
+    if (pathname !== "/") {
+      return NextResponse.redirect(new URL("/", request.url));
+    }
+
+    // If it's already at the root, let it render whatever is there.
+    return NextResponse.next();
+  }
 
   console.log("middleware", { pathname, subdomain, rootDomain });
 
