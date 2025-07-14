@@ -65,7 +65,7 @@ export async function middleware(request: NextRequest) {
   console.log("middleware", { pathname, subdomain, rootDomain });
 
   // --- Logic for requests with a subdomain ---
-  if (subdomain && rootDomain) {
+  if (subdomain) {
     // For a subdomain, both the root path and the atproto-did path
     // should resolve to the user's public DID document.
     if (pathname === "/.well-known/atproto-did") {
@@ -78,10 +78,14 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(
       new URL("/.well-known/atproto-did", request.url)
     );
-  }
+    // biome-ignore lint/style/noUselessElse: readability
+  } else {
+    // --- Logic for requests on a root domain (no subdomain) ---
+    // don't let people manually go to the hostnameSpecific routes
+    if (pathname.startsWith("/hostnameSpecific")) {
+      return NextResponse.redirect(new URL("/", request.url));
+    }
 
-  // --- Logic for requests on a root domain (no subdomain) ---
-  if (!subdomain && rootDomain) {
     // Show the splash page for the root domain.
     if (pathname === "/") {
       return NextResponse.rewrite(
