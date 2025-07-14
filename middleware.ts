@@ -1,28 +1,18 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { rootDomains } from "@/internals/utils";
 
+/**
+ * Extracts the subdomain from a request.
+ * It supports multiple root domains, Vercel preview URLs, and localhost.
+ *
+ * @param {NextRequest} request - The incoming Next.js request.
+ * @returns {string | null} The extracted subdomain or null if not found.
+ */
 function extractSubdomain(request: NextRequest): string | null {
-  const url = request.url;
   const host = request.headers.get("host") || "";
   const hostname = host.split(":")[0];
 
-  // Local development environment
-  if (url.includes("localhost") || url.includes("127.0.0.1")) {
-    // Try to extract subdomain from the full URL
-    const fullUrlMatch = url.match(/http:\/\/([^.]+)\.localhost/);
-    if (fullUrlMatch?.[1]) {
-      return fullUrlMatch[1];
-    }
-
-    // Fallback to host header approach
-    if (hostname.includes(".localhost")) {
-      return hostname.split(".")[0];
-    }
-
-    return null;
-  }
-
-  // Handle preview deployment URLs (tenant---branch-name.vercel.app)
+  // Handle Vercel preview deployments (e.g., "tenant1---my-branch.vercel.app")
   if (hostname.includes("---") && hostname.endsWith(".vercel.app")) {
     const parts = hostname.split("---");
     return parts.length > 0 ? parts[0] : null;
@@ -30,22 +20,21 @@ function extractSubdomain(request: NextRequest): string | null {
 
   // Find the matching root domain from our list
   const matchingRootDomain = rootDomains.find((domain) => {
-    return hostname.includes(domain);
+    const formattedDomain = domain.split(":")[0];
+    return hostname.endsWith(formattedDomain);
   });
 
   if (matchingRootDomain) {
-    // Production environment - check for current hostname
     const rootDomainFormatted = matchingRootDomain.split(":")[0];
 
-    // Regular subdomain detection
-    const isSubdomain =
+    // Ensure it's a true subdomain and not the root domain itself (or www)
+    if (
       hostname !== rootDomainFormatted &&
-      hostname !== `www.${rootDomainFormatted}` &&
-      hostname.endsWith(`.${rootDomainFormatted}`);
-
-    console.log("extractSubdomain", isSubdomain, rootDomainFormatted);
-
-    return isSubdomain ? hostname.replace(`.${rootDomainFormatted}`, "") : null;
+      hostname !== `www.${rootDomainFormatted}`
+    ) {
+      const subdomain = hostname.replace(`.${rootDomainFormatted}`, "");
+      return subdomain;
+    }
   }
 
   return null;
@@ -55,21 +44,21 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const subdomain = extractSubdomain(request);
 
-  console.log("middleware", pathname, subdomain);
+  console.log("middleware", { pathname, subdomain });
 
   if (subdomain) {
-    // Block access to admin page from subdomains
+    // Block access to /admin page from any subdomain
     if (pathname.startsWith("/admin")) {
       return NextResponse.redirect(new URL("/", request.url));
     }
 
-    // For the root path on a subdomain, rewrite to the subdomain page
+    // Rewrite root path on a subdomain to the dynamic subdomain page
     if (pathname === "/") {
       return NextResponse.rewrite(new URL(`/s/${subdomain}`, request.url));
     }
   }
 
-  // On the root domain, allow normal access
+  // Allow all other requests on the root domains to proceed
   return NextResponse.next();
 }
 
