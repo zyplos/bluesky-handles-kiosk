@@ -25,12 +25,17 @@ import styles from "@/app/page.module.css";
 //   };
 // }
 
-export default async function SubdomainPage({
-  params,
-}: {
-  params: Promise<{ subdomain: string }>;
-}) {
-  const { subdomain } = await params;
+interface SubdomainParams {
+  rootDomain: string;
+  subdomain: string;
+}
+
+interface SubdomainPageProps {
+  params: Promise<SubdomainParams>;
+}
+
+export default async function SubdomainPage({ params }: SubdomainPageProps) {
+  const { rootDomain, subdomain } = await params;
   // const subdomainData = await getSubdomainData(subdomain);
 
   // if (!subdomainData) {
@@ -48,7 +53,7 @@ export default async function SubdomainPage({
         </Link> */}
 
         <h1 className="text-4xl font-bold tracking-tight text-gray-900">
-          Welcome to {subdomain}
+          Welcome to {subdomain}.{rootDomain}
         </h1>
         <p className="mt-3 text-lg text-gray-600">
           This is your custom subdomain page

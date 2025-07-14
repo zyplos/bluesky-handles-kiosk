@@ -1,21 +1,29 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { rootDomains } from "@/internals/utils";
 
+interface DomainInfo {
+  subdomain: string | null;
+  rootDomain: string | null;
+}
+
 /**
- * Extracts the subdomain from a request.
+ * Extracts the subdomain and the root domain from a request.
  * It supports multiple root domains, Vercel preview URLs, and localhost.
  *
  * @param {NextRequest} request - The incoming Next.js request.
- * @returns {string | null} The extracted subdomain or null if not found.
+ * @returns {DomainInfo} An object containing the subdomain and the matched root domain.
  */
-function extractSubdomain(request: NextRequest): string | null {
+function extractDomainInfo(request: NextRequest): DomainInfo {
   const host = request.headers.get("host") || "";
   const hostname = host.split(":")[0];
 
   // Handle Vercel preview deployments (e.g., "tenant1---my-branch.vercel.app")
   if (hostname.includes("---") && hostname.endsWith(".vercel.app")) {
     const parts = hostname.split("---");
-    return parts.length > 0 ? parts[0] : null;
+    return {
+      subdomain: parts.length > 0 ? parts[0] : null,
+      rootDomain: "vercel.app",
+    };
   }
 
   // Find the matching root domain from our list
@@ -33,43 +41,33 @@ function extractSubdomain(request: NextRequest): string | null {
       hostname !== `www.${rootDomainFormatted}`
     ) {
       const subdomain = hostname.replace(`.${rootDomainFormatted}`, "");
-      return subdomain;
+      return { subdomain, rootDomain: rootDomainFormatted };
     }
   }
 
-  return null;
+  return { subdomain: null, rootDomain: null };
 }
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const subdomain = extractSubdomain(request);
+  const { subdomain, rootDomain } = extractDomainInfo(request);
 
-  console.log("middleware", { pathname, subdomain });
+  console.log("middleware", { pathname, subdomain, rootDomain });
 
-  if (subdomain) {
+  if (subdomain && rootDomain) {
     // Block access to /admin page from any subdomain
     if (pathname.startsWith("/admin")) {
       return NextResponse.redirect(new URL("/", request.url));
     }
 
-    // Rewrite root path on a subdomain to the dynamic subdomain page
+    // Rewrite root path on a subdomain to the dynamic subdomain and rootDomain page
     if (pathname === "/") {
-      return NextResponse.rewrite(new URL(`/s/${subdomain}`, request.url));
+      return NextResponse.rewrite(
+        new URL(`/s/${rootDomain}/${subdomain}`, request.url)
+      );
     }
   }
 
   // Allow all other requests on the root domains to proceed
   return NextResponse.next();
 }
-
-export const config = {
-  matcher: [
-    /*
-     * Match all paths except for:
-     * 1. /api routes
-     * 2. /_next (Next.js internals)
-     * 3. all root files inside /public (e.g. /favicon.ico)
-     */
-    "/((?!api|_next|[\\w-]+\\.\\w+).*)",
-  ],
-};
