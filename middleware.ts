@@ -3,21 +3,14 @@ import { rootDomains } from "@/internals/utils";
 
 interface DomainInfo {
   subdomain: string | null;
+  /** The matched root domain without port, e.g. "localhost" or "my-domain.com" */
   rootDomain: string | null;
 }
 
-/**
- * Extracts the subdomain and the root domain from a request.
- * It supports multiple root domains, Vercel preview URLs, and localhost.
- *
- * @param {NextRequest} request - The incoming Next.js request.
- * @returns {DomainInfo} An object containing the subdomain and the matched root domain.
- */
 function extractDomainInfo(request: NextRequest): DomainInfo {
   const host = request.headers.get("host") || "";
   const hostname = host.split(":")[0];
 
-  // Handle Vercel preview deployments (e.g., "tenant1---my-branch.vercel.app")
   if (hostname.includes("---") && hostname.endsWith(".vercel.app")) {
     const parts = hostname.split("---");
     return {
@@ -26,27 +19,32 @@ function extractDomainInfo(request: NextRequest): DomainInfo {
     };
   }
 
-  // Find the matching root domain from our list
-  const matchingRootDomain = rootDomains.find((domain) => {
-    const formattedDomain = domain.split(":")[0];
-    return hostname.endsWith(formattedDomain);
-  });
+  for (const domain of rootDomains) {
+    const rootDomainFormatted = domain.split(":")[0];
+    if (hostname.endsWith(rootDomainFormatted)) {
+      if (
+        hostname !== rootDomainFormatted &&
+        hostname !== `www.${rootDomainFormatted}`
+      ) {
+        const subdomain = hostname.replace(`.${rootDomainFormatted}`, "");
+        return { subdomain, rootDomain: rootDomainFormatted };
+      }
 
-  if (matchingRootDomain) {
-    const rootDomainFormatted = matchingRootDomain.split(":")[0];
-
-    // Ensure it's a true subdomain and not the root domain itself (or www)
-    if (
-      hostname !== rootDomainFormatted &&
-      hostname !== `www.${rootDomainFormatted}`
-    ) {
-      const subdomain = hostname.replace(`.${rootDomainFormatted}`, "");
-      return { subdomain, rootDomain: rootDomainFormatted };
+      return { subdomain: null, rootDomain: rootDomainFormatted };
     }
   }
 
   return { subdomain: null, rootDomain: null };
 }
+
+/*
+  notes
+
+  /                          | hostnameSpecific/[rootDomain]/page.ts                | show splash image with discord login somewhere
+  /dashboard                 | dashboard/page.ts                   | let people input their bluesky did here
+  /.well-known/atproto-did   | hostnameSpecific/[rootDomain]/[subdomain]/route.ts   | send plain text response with user's bluesky did
+
+*/
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -54,20 +52,44 @@ export async function middleware(request: NextRequest) {
 
   console.log("middleware", { pathname, subdomain, rootDomain });
 
+  // --- Logic for requests with a subdomain ---
   if (subdomain && rootDomain) {
-    // Block access to /admin page from any subdomain
-    if (pathname.startsWith("/admin")) {
-      return NextResponse.redirect(new URL("/", request.url));
-    }
-
-    // Rewrite root path on a subdomain to the dynamic subdomain and rootDomain page
-    if (pathname === "/") {
+    // For a subdomain, both the root path and the atproto-did path
+    // should resolve to the user's public DID document.
+    if (pathname === "/" || pathname === "/.well-known/atproto-did") {
       return NextResponse.rewrite(
-        new URL(`/s/${rootDomain}/${subdomain}`, request.url)
+        new URL(`/hostnameSpecific/${rootDomain}/${subdomain}`, request.url)
       );
     }
   }
 
-  // Allow all other requests on the root domains to proceed
+  // --- Logic for requests on a root domain (no subdomain) ---
+  if (!subdomain && rootDomain) {
+    // Show the splash page for the root domain.
+    if (pathname === "/") {
+      return NextResponse.rewrite(
+        new URL(`/hostnameSpecific/${rootDomain}`, request.url)
+      );
+    }
+
+    // Rewrite to the main dashboard page.
+    // if (pathname === "/dashboard") {
+    //   return NextResponse.rewrite(new URL("/dashboard", request.url));
+    // }
+  }
+
+  // Allow all other requests to proceed without a rewrite.
   return NextResponse.next();
 }
+
+export const config = {
+  matcher: [
+    /*
+     * Match all paths except for:
+     * 1. /api routes
+     * 2. /_next (Next.js internals)
+     * 3. all root files inside /public (e.g. /favicon.ico)
+     */
+    "/((?!api|_next|[\\w-]+\\.\\w+).*)",
+  ],
+};
