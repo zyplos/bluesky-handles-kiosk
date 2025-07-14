@@ -37,12 +37,16 @@ function extractSubdomain(request: NextRequest): string | null {
     hostname !== `www.${rootDomainFormatted}` &&
     hostname.endsWith(`.${rootDomainFormatted}`);
 
+  console.log("extractSubdomain", isSubdomain, rootDomainFormatted);
+
   return isSubdomain ? hostname.replace(`.${rootDomainFormatted}`, "") : null;
 }
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const subdomain = extractSubdomain(request);
+
+  console.log("middleware", pathname, subdomain);
 
   if (subdomain) {
     // Block access to admin page from subdomains
