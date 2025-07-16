@@ -12,5 +12,8 @@ export async function GET(request: Request, { params }: Params) {
 
   return new Response(`Welcome to ${subdomain}.${rootDomain}`, {
     status: 200,
+    headers: {
+      "Content-Type": "text/plain",
+    },
   });
 }
