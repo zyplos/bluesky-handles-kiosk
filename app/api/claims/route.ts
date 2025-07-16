@@ -1,6 +1,7 @@
 "use server";
 
 import { isStringEmpty } from "@/internals/utils";
+import { NextResponse, type NextRequest } from "next/server";
 
 export interface HandleFormState {
   message: string;
@@ -10,14 +11,11 @@ export interface HandleFormState {
 const HANDLE_REGEX =
   /^([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?$/;
 
-export async function updateHandle(
-  initialState: HandleFormState,
-  formData: FormData
-) {
+export async function POST(req: NextRequest) {
+  const formData = await req.formData();
   const handle = formData.get("handleString")?.toString().trim();
   const did = formData.get("didString")?.toString().trim();
 
-  console.log("initialState", initialState);
   console.log("formData", formData);
   console.log("HANDLE", handle);
   console.log("DID", did);
@@ -26,8 +24,8 @@ export async function updateHandle(
 
   if (
     !handle ||
-    handle.includes(".") ||
-    !HANDLE_REGEX.test(handle) ||
+    // handle.includes(".") ||
+    // !HANDLE_REGEX.test(handle) ||
     handle.length >= 100
   ) {
     errors.push(
@@ -40,8 +38,11 @@ export async function updateHandle(
   }
 
   if (errors.length > 0) {
-    return { message: "Sorry, couldn't claim the handle you wanted.", errors };
+    return NextResponse.json(
+      { message: "Sorry, couldn't claim the handle you wanted.", errors },
+      { status: 400 }
+    );
   }
 
-  return { message: `claimed ${handle}`, errors: [] };
+  return NextResponse.json({ message: `claimed ${handle}`, errors: [] });
 }
