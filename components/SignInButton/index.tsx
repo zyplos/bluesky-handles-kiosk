@@ -5,7 +5,7 @@ export default function SignInButton() {
     <form
       action={async () => {
         "use server";
-        await signIn("discord");
+        await signIn("discord", { redirectTo: "/dashboard" });
       }}
     >
       <button type="submit">Sign in with Discord</button>
