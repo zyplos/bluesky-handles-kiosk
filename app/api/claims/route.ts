@@ -65,7 +65,7 @@ export async function POST(
     isStringEmpty(did) ||
     did.length >= 300 ||
     !did.startsWith("did:") ||
-    DID_REGEX.test(did)
+    !DID_REGEX.test(did)
   ) {
     errors.push(`Invalid DID. Make sure it starts with "did:"`);
   }
