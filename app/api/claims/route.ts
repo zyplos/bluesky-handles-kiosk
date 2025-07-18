@@ -1,5 +1,8 @@
 "use server";
 
+import type { ClaimData } from "@/internals/apiTypes";
+import { auth } from "@/internals/auth";
+import { executeQuery } from "@/internals/db";
 import { isStringEmpty, rootDomains } from "@/internals/utils";
 import { NextResponse, type NextRequest } from "next/server";
 
@@ -18,6 +21,18 @@ const DID_REGEX = /^did:[a-z]+:[a-zA-Z0-9._:%-]*[a-zA-Z0-9._-]$/;
 export async function POST(
   req: NextRequest
 ): Promise<NextResponse<HandleFormState>> {
+  // ===== check auth session
+  // TODO kick to /?auth-timeout and show a message
+  const session = await auth();
+  const user = session?.user;
+  if (!session || !user) {
+    return NextResponse.json(
+      { message: "It seems you need to sign in again.", errors: [] },
+      { status: 401 }
+    );
+  }
+
+  // ===== hostname and form validation
   const host = req.headers.get("host");
   if (!host) {
     return NextResponse.json(
@@ -77,8 +92,31 @@ export async function POST(
     );
   }
 
-  return NextResponse.json({
-    message: `claimed ${handleWithHostname}`,
-    errors: [],
-  });
+  // ===== actual database stuff
+  try {
+    const results = await executeQuery<ClaimData>(
+      `INSERT INTO 
+      claims (discord_id, handle, did, date_claimed) 
+      VALUES(?, ?, ?, NOW()) 
+      ON DUPLICATE KEY UPDATE handle=?, did=?`
+    );
+
+    console.log(results);
+
+    return NextResponse.json({
+      message: `claimed ${handleWithHostname}`,
+      errors: [],
+    });
+  } catch (error) {
+    console.error("unexpected error grabbing visitors log for chunk", error);
+
+    return NextResponse.json(
+      {
+        message:
+          "Sorry, an unexpected error occurred trying to claim your handle.",
+        errors: [],
+      },
+      { status: 500 }
+    );
+  }
 }
