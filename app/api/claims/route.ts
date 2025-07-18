@@ -32,6 +32,18 @@ export async function POST(
     );
   }
 
+  const discordId = user.id;
+  if (!discordId) {
+    return NextResponse.json(
+      {
+        message:
+          "Sorry, couldn't get your Discord ID which is needed to reserve a handle.",
+        errors: [],
+      },
+      { status: 400 }
+    );
+  }
+
   // ===== hostname and form validation
   const host = req.headers.get("host");
   if (!host) {
@@ -92,13 +104,29 @@ export async function POST(
     );
   }
 
+  // last checks to make typescript happy
+  if (!handle || !did) {
+    return NextResponse.json(
+      { message: "Sorry, couldn't claim the handle you wanted.", errors },
+      { status: 400 }
+    );
+  }
+
   // ===== actual database stuff
+
+  console.log(discordId, handle, did);
+
   try {
     const results = await executeQuery<ClaimData>(
       `INSERT INTO 
-      claims (discord_id, handle, did, date_claimed) 
-      VALUES(?, ?, ?, NOW()) 
-      ON DUPLICATE KEY UPDATE handle=?, did=?`
+      claims (discord_id, handle, did, hostname, date_claimed)
+      VALUES ($1, $2, $3, $4, NOW())
+      ON CONFLICT (discord_id) DO UPDATE SET
+        handle = EXCLUDED.handle,
+        did = EXCLUDED.did,
+        hostname = EXCLUDED.hostname,
+        date_claimed = NOW();`,
+      [discordId, handle, did, hostname]
     );
 
     console.log(results);
@@ -108,7 +136,7 @@ export async function POST(
       errors: [],
     });
   } catch (error) {
-    console.error("unexpected error grabbing visitors log for chunk", error);
+    console.error("unexpected error trying to update claim", error);
 
     return NextResponse.json(
       {

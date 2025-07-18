@@ -6,7 +6,7 @@ CREATE TABLE claims (
     handle VARCHAR(255) NOT NULL UNIQUE,
     did VARCHAR(255) NOT NULL UNIQUE,
     hostname VARCHAR(255) NOT NULL,
-    date_claimed DATETIME NOT NULL
+    date_claimed TIMESTAMP WITH TIME ZONE NOT NULL
 );
 
 */
