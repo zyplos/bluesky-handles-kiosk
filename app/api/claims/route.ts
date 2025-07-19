@@ -18,6 +18,9 @@ const HANDLE_REGEX =
 // https://atproto.com/specs/did#at-protocol-did-identifier-syntax
 const DID_REGEX = /^did:[a-z]+:[a-zA-Z0-9._:%-]*[a-zA-Z0-9._-]$/;
 
+const MAX_LENGTH_HANDLE = 100;
+const MAX_LENGTH_DID = 150;
+
 export async function POST(
   req: NextRequest
 ): Promise<NextResponse<HandleFormState>> {
@@ -34,6 +37,10 @@ export async function POST(
 
   const discordId = user.id;
   if (!discordId) {
+    console.error(
+      "a user is logged in with discord but doesn't have a discord id for some reason",
+      session
+    );
     return NextResponse.json(
       {
         message:
@@ -47,6 +54,7 @@ export async function POST(
   // ===== hostname and form validation
   const host = req.headers.get("host");
   if (!host) {
+    console.error("the request does not have a host", req.headers);
     return NextResponse.json(
       { message: "Sorry, couldn't process your request.", errors: [] },
       { status: 400 }
@@ -55,6 +63,12 @@ export async function POST(
 
   const hostname = host.split(":")[0];
   if (!rootDomains.includes(hostname) && !hostname.includes("localhost")) {
+    console.error(
+      "someone tried to claim a handle but the hostname wasn't in rootDomains",
+      host,
+      hostname,
+      rootDomains
+    );
     return NextResponse.json(
       {
         message: `Sorry, ${hostname} doesn't seem configured correctly to take handle claims.`,
@@ -78,7 +92,7 @@ export async function POST(
   if (
     !handle ||
     isStringEmpty(handle) ||
-    handle.length >= 100 ||
+    handle.length > MAX_LENGTH_HANDLE ||
     handle.includes(".") ||
     !HANDLE_REGEX.test(handleWithHostname)
   ) {
@@ -90,7 +104,7 @@ export async function POST(
   if (
     !did ||
     isStringEmpty(did) ||
-    did.length >= 300 ||
+    did.length > MAX_LENGTH_DID ||
     !did.startsWith("did:") ||
     !DID_REGEX.test(did)
   ) {
@@ -106,6 +120,7 @@ export async function POST(
 
   // last checks to make typescript happy
   if (!handle || !did) {
+    console.error("last checks failed somehow??", handle, did);
     return NextResponse.json(
       { message: "Sorry, couldn't claim the handle you wanted.", errors },
       { status: 400 }
@@ -113,8 +128,6 @@ export async function POST(
   }
 
   // ===== actual database stuff
-
-  console.log(discordId, handle, did);
 
   try {
     const results = await executeQuery<ClaimData>(
