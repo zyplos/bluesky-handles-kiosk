@@ -26,3 +26,7 @@ export interface ClaimData {
   hostname: string;
   date_claimed: string;
 }
+
+export interface DidResponse {
+  did: string;
+}
