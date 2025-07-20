@@ -2,6 +2,7 @@
 
 import { auth } from "@/internals/auth";
 import { executeQuery } from "@/internals/db";
+import RESERVED from "@/internals/reservedHandles";
 import { isStringEmpty, rootDomains } from "@/internals/utils";
 import { NextResponse, type NextRequest } from "next/server";
 
@@ -87,6 +88,19 @@ export async function POST(
 
   const errors: string[] = [];
 
+  if (!handle || !did) {
+    return NextResponse.json(
+      {
+        message:
+          "You must include the handle you want and a did to claim your handle.",
+        errors,
+      },
+      { status: 400 }
+    );
+  }
+
+  // collect errors
+
   const handleWithHostname = `${handle}.${hostname}`;
   if (
     !handle ||
@@ -100,6 +114,10 @@ export async function POST(
     );
   }
 
+  if (RESERVED.includes(handle)) {
+    errors.push("You cannot use this handle.");
+  }
+
   if (
     !did ||
     isStringEmpty(did) ||
@@ -110,16 +128,9 @@ export async function POST(
     errors.push(`Invalid DID. Make sure it starts with "did:"`);
   }
 
-  if (errors.length > 0) {
-    return NextResponse.json(
-      { message: "Sorry, couldn't claim the handle you wanted.", errors },
-      { status: 400 }
-    );
-  }
+  // return errors
 
-  // last checks to make typescript happy
-  if (!handle || !did) {
-    console.error("last checks failed somehow??", handle, did);
+  if (errors.length > 0) {
     return NextResponse.json(
       { message: "Sorry, couldn't claim the handle you wanted.", errors },
       { status: 400 }
