@@ -130,7 +130,8 @@ export async function POST(
   // ===== actual database stuff
 
   try {
-    const results = await executeQuery<ClaimData>(
+    // returns [] on success
+    const _results = await executeQuery(
       `INSERT INTO 
       claims (discord_id, handle, did, hostname, date_claimed)
       VALUES ($1, $2, $3, $4, NOW())
@@ -141,8 +142,6 @@ export async function POST(
         date_claimed = NOW();`,
       [discordId, handle, did, hostname]
     );
-
-    console.log(results);
 
     return NextResponse.json({
       message: `claimed ${handleWithHostname}`,
