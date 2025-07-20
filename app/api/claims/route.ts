@@ -1,6 +1,5 @@
 "use server";
 
-import type { ClaimData } from "@/internals/apiTypes";
 import { auth } from "@/internals/auth";
 import { executeQuery } from "@/internals/db";
 import { isStringEmpty, rootDomains } from "@/internals/utils";
@@ -135,10 +134,9 @@ export async function POST(
       `INSERT INTO 
       claims (discord_id, handle, did, hostname, date_claimed)
       VALUES ($1, $2, $3, $4, NOW())
-      ON CONFLICT (discord_id) DO UPDATE SET
+      ON CONFLICT (discord_id, hostname) DO UPDATE SET
         handle = EXCLUDED.handle,
         did = EXCLUDED.did,
-        hostname = EXCLUDED.hostname,
         date_claimed = NOW();`,
       [discordId, handle, did, hostname]
     );
