@@ -6,6 +6,9 @@ const RESERVED = [
   "admin",
   "webmaster",
   "zyplos",
+  "sonic",
+  "kirby",
+  "link",
 
   // Technical and Service-Related
   "ftp", // File Transfer Protocol
