@@ -15,6 +15,9 @@ declare module "next-auth" {
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [Discord],
+  pages: {
+    error: "/signin-failed",
+  },
   callbacks: {
     // stuff that matters is in "profile" NOT user
     jwt({ token, profile }) {
@@ -29,5 +32,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       session.user.username = token.username as string;
       return session;
     },
+    // signIn({ profile }) {
+    //   console.log("SIGN IN PROFILE", profile);
+    //   return false;
+    // },
   },
 });
