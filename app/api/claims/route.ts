@@ -24,16 +24,11 @@ const MAX_LENGTH_DID = 150;
 
 export async function POST(
   req: NextRequest
-): Promise<NextResponse<HandleFormState>> {
-  // ===== check auth session
-  // TODO kick to /?auth-timeout and show a message
+): Promise<NextResponse<HandleFormState> | NextResponse> {
   const session = await auth();
   const user = session?.user;
   if (!session || !user) {
-    return NextResponse.json(
-      { message: "It seems you need to sign in again.", errors: [] },
-      { status: 401 }
-    );
+    return NextResponse.redirect("/auth/signin?error=TimedOut");
   }
 
   const discordId = user.id;
@@ -45,7 +40,7 @@ export async function POST(
     return NextResponse.json(
       {
         message:
-          "Sorry, couldn't get your Discord ID which is needed to reserve a handle.",
+          "Sorry, couldn't get your Discord ID which is needed to reserve a handle. Try signing out and signing in again.",
         errors: [],
       },
       { status: 400 }

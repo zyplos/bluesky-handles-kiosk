@@ -21,6 +21,7 @@ const errorMap: { [key: string]: React.ReactElement } = {
       allowlist.
     </p>
   ),
+  TimedOut: <p>Sorry, your session timed out. You'll need to sign in again.</p>,
   Default: (
     <p>
       An unexpected error happened trying to sign you in. If this keeps
