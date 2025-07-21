@@ -1,6 +1,7 @@
 "use server";
 
 import { auth } from "@/internals/auth";
+import containsBadWord from "@/internals/badWords";
 import { executeQuery } from "@/internals/db";
 import RESERVED from "@/internals/reservedHandles";
 import { isStringEmpty, rootDomains } from "@/internals/utils";
@@ -114,7 +115,7 @@ export async function POST(
     );
   }
 
-  if (RESERVED.includes(handle)) {
+  if (RESERVED.includes(handle) || containsBadWord(handle)) {
     errors.push("You cannot use this handle.");
   }
 
