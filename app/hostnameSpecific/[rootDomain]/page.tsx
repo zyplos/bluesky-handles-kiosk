@@ -1,4 +1,9 @@
-import SignInButton from "@/components/SignInButton";
+import { PageButton } from "@/components/Button";
+import {
+  CenteredContent,
+  FooterContent,
+  HomeLayout,
+} from "@/components/HomeLayout";
 import { SignOutButton } from "@/components/SignOutButton";
 import { auth } from "@/internals/auth";
 import Image from "next/image";
@@ -14,26 +19,30 @@ interface PageProps {
 export default async function SubdomainPage({ params }: PageProps) {
   const { rootDomain } = await params;
   const session = await auth();
-  console.log(session);
   const user = session?.user;
 
   return (
-    <div>
-      <h1>home page {rootDomain}</h1>
+    <HomeLayout>
+      <CenteredContent>
+        <h1>home page {rootDomain}</h1>
+      </CenteredContent>
 
-      {!user && <SignInButton />}
-
-      {user && <SignOutButton />}
-
-      {user?.name && <p>you: {user.name}</p>}
-      {user?.id && <p>id: {user.id}</p>}
-      {user?.username && <p>username: {user.username}</p>}
-
-      {user?.image && (
-        <p>
-          <Image src={user.image} alt="" width={64} height={64} />
-        </p>
-      )}
-    </div>
+      <FooterContent>
+        {!user && <PageButton href="/about">Claim a Bluesky Handle</PageButton>}
+        {/*  */}
+        {user && (
+          <>
+            <div>
+              {user?.username && <p>{user.username}</p>}
+              {user.image && (
+                <Image src={user.image} alt="" width={64} height={64} />
+              )}
+              <SignOutButton />
+            </div>
+            <PageButton href="/claim">Claim Handle</PageButton>
+          </>
+        )}
+      </FooterContent>
+    </HomeLayout>
   );
 }
