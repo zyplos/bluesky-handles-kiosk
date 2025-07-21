@@ -1,4 +1,5 @@
 import { signIn } from "@/internals/auth";
+import { Button } from "../Button";
 
 export default function SignInButton() {
   return (
@@ -8,7 +9,7 @@ export default function SignInButton() {
         await signIn("discord", { redirectTo: "/dashboard" });
       }}
     >
-      <button type="submit">Sign in with Discord</button>
+      <Button type="submit">Sign in with Discord</Button>
     </form>
   );
 }
