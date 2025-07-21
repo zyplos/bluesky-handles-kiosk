@@ -1,7 +1,6 @@
-"use client";
-
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+interface AuthErrorNoticeProps {
+  error: string;
+}
 
 const errorMap: { [key: string]: React.ReactElement } = {
   Configuration: (
@@ -13,7 +12,7 @@ const errorMap: { [key: string]: React.ReactElement } = {
   OAuthCallbackError: (
     <p>
       Looks like there was a problem trying to sign you in. If you'd like, try
-      again from the home page.
+      again.
     </p>
   ),
   AccessDenied: (
@@ -30,16 +29,6 @@ const errorMap: { [key: string]: React.ReactElement } = {
   ),
 };
 
-export default function AuthErrorPage() {
-  const search = useSearchParams();
-  const error = search.get("error") || "Default";
-
-  return (
-    <div>
-      <h1>oops</h1>
-      <div>{errorMap[error] || errorMap.Default}</div>
-
-      <Link href="/">home</Link>
-    </div>
-  );
+export default function AuthErrorNotice({ error }: AuthErrorNoticeProps) {
+  return errorMap[error] || errorMap.Default;
 }

@@ -8,3 +8,7 @@ export const rootDomains = process.env.HOSTNAMES?.split(" ") || [
 export function isStringEmpty(str: string) {
   return !str || /^\s*$/.test(str);
 }
+
+export interface NextPageProps {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}

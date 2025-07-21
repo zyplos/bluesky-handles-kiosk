@@ -16,7 +16,8 @@ declare module "next-auth" {
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [Discord],
   pages: {
-    error: "/signin-failed",
+    signIn: "/auth/signin",
+    error: "/auth/failed",
   },
   callbacks: {
     // stuff that matters is in "profile" NOT user
