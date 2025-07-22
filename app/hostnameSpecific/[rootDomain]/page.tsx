@@ -8,7 +8,6 @@ import {
   HomeLayout,
 } from "@/components/HomeLayout";
 import { SignOutButton } from "@/components/SignOutButton";
-import styles from "@/styles/Home.module.scss";
 
 export default async function SubdomainPage({
   params,
@@ -35,15 +34,13 @@ export default async function SubdomainPage({
                 <Image
                   src={user.image}
                   alt=""
-                  width={48}
-                  height={48}
-                  className={styles.profilePicture}
+                  width={128}
+                  height={128}
+                  className={"profilePicture"}
                 />
               )}
 
-              {user?.username && (
-                <p className={styles.username}>{user.username}</p>
-              )}
+              {user?.username && <p className={"username"}>{user.username}</p>}
 
               <SignOutButton />
             </div>

@@ -99,6 +99,17 @@ a {
   margin-bottom: var(--space-l)
 }
 
+.profilePicture {
+  border-radius: 300px;
+  display: block;
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+// .username {
+//   font-size: 1.2rem;
+// }
+
 .textContent {
 
   >h1,

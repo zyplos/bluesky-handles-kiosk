@@ -9,7 +9,9 @@ export default async function DashboardPage({
 }: HostnameSpecificPageProps) {
   const { rootDomain } = await params;
   const session = await auth();
-  if (!session) {
+  const user = session?.user;
+
+  if (!session || !user) {
     return redirect("/");
   }
 
