@@ -22,5 +22,12 @@
 .footerInfo {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  gap: var(--space);
+
+  flex-direction: column;
+
+  @include common.desktopScreenStyles {
+    flex-direction: row;
+  }
 }

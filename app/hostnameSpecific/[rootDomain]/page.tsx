@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { PageButton } from "@/components/Button";
 import {
   CenteredContent,
@@ -6,7 +7,8 @@ import {
 } from "@/components/HomeLayout";
 import { SignOutButton } from "@/components/SignOutButton";
 import { auth } from "@/internals/auth";
-import Image from "next/image";
+
+import styles from "@/styles/Home.module.scss";
 
 interface Params {
   rootDomain: string;
@@ -32,11 +34,21 @@ export default async function SubdomainPage({ params }: PageProps) {
         {/*  */}
         {user && (
           <>
-            <div>
-              {user?.username && <p>{user.username}</p>}
+            <div className="flexRow">
               {user.image && (
-                <Image src={user.image} alt="" width={64} height={64} />
+                <Image
+                  src={user.image}
+                  alt=""
+                  width={48}
+                  height={48}
+                  className={styles.profilePicture}
+                />
               )}
+
+              {user?.username && (
+                <p className={styles.username}>{user.username}</p>
+              )}
+
               <SignOutButton />
             </div>
             <PageButton href="/claim">Claim Handle</PageButton>
