@@ -30,3 +30,21 @@
     transform: scale(0.99);
   }
 }
+
+.button:disabled {
+  background-color: var(--color-muted);
+  cursor: default;
+  transform: none;
+  opacity: 0.75;
+
+  &:hover {
+    background-color: var(--color-muted);
+    transform: none;
+  }
+
+  &:active {
+    border-radius: var(--radius-s);
+    background-color: var(--color-muted);
+    transform: none;
+  }
+}
