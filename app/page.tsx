@@ -11,7 +11,7 @@ import SignInButton from "@/components/SignInButton";
 
 export default async function Home() {
   return (
-    <HomeLayout>
+    <HomeLayout hostname="">
       <CenteredContent>
         <h1>not configured!</h1>
         <p>zyplos/bluesky-handles-kiosk/wiki/setup</p>

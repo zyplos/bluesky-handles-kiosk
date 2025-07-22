@@ -24,7 +24,7 @@ export default async function SubdomainPage({ params }: PageProps) {
   const user = session?.user;
 
   return (
-    <HomeLayout>
+    <HomeLayout hostname={rootDomain}>
       <CenteredContent>
         <h1>home page {rootDomain}</h1>
       </CenteredContent>
