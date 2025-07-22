@@ -149,7 +149,7 @@ export async function POST(
     );
 
     return NextResponse.json({
-      message: `claimed ${handleWithHostname}`,
+      message: `You've successfully claimed ${handleWithHostname}`,
       errors: [],
     });
   } catch (error) {
