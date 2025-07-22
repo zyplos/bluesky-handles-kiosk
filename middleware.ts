@@ -101,6 +101,12 @@ export async function middleware(request: NextRequest) {
         new URL(`/hostnameSpecific/${rootDomain}`, request.url)
       );
     }
+
+    if (pathname === "/handles") {
+      return NextResponse.rewrite(
+        new URL(`/hostnameSpecific/${rootDomain}/handles`, request.url)
+      );
+    }
   }
 
   // Allow all other requests to proceed without a rewrite.

@@ -51,7 +51,7 @@ export default async function SubdomainPage({ params }: PageProps) {
 
               <SignOutButton />
             </div>
-            <PageButton href="/claim">Claim Handle</PageButton>
+            <PageButton href="/handles">Claim Handle</PageButton>
           </>
         )}
       </FooterContent>
