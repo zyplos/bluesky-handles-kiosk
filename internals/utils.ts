@@ -12,3 +12,11 @@ export function isStringEmpty(str: string) {
 export interface NextPageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
+
+interface RootDomainParams {
+  rootDomain: string;
+}
+
+export interface HostnameSpecificPageProps {
+  params: Promise<RootDomainParams>;
+}

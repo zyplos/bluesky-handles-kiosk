@@ -1,4 +1,6 @@
 import Image from "next/image";
+import { auth } from "@/internals/auth";
+import type { HostnameSpecificPageProps } from "@/internals/utils";
 import { PageButton } from "@/components/Button";
 import {
   CenteredContent,
@@ -6,19 +8,11 @@ import {
   HomeLayout,
 } from "@/components/HomeLayout";
 import { SignOutButton } from "@/components/SignOutButton";
-import { auth } from "@/internals/auth";
-
 import styles from "@/styles/Home.module.scss";
 
-interface Params {
-  rootDomain: string;
-}
-
-interface PageProps {
-  params: Promise<Params>;
-}
-
-export default async function SubdomainPage({ params }: PageProps) {
+export default async function SubdomainPage({
+  params,
+}: HostnameSpecificPageProps) {
   const { rootDomain } = await params;
   const session = await auth();
   const user = session?.user;
