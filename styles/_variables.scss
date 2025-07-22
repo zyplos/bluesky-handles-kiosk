@@ -85,6 +85,9 @@
 
   --color-card-bg: #fdf4f4;
   --color-card-bg-secondary: #c7c7c7;
+
+  --color-form-input-background: #e1d1d1;
+  --color-form-input-border: #cfa3a3;
 }
 
 #root[data-hostname="waypast.cool"] {
@@ -120,4 +123,8 @@
 
   --color-card-bg: #4a403e;
   --color-card-bg-secondary: #332c2b;
+
+  --color-form-input-background: #212020;
+  --color-form-input-background-focused: #212020;
+  --color-form-input-border: #5a4f4c;
 }

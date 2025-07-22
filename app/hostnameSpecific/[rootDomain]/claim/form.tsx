@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { Button } from "@/components/Button";
+import styles from "@/styles/Claim.module.scss";
 
 export function HandleForm() {
   const [message, setMessage] = useState("");
@@ -32,12 +33,16 @@ export function HandleForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="textContent">
-      <label htmlFor="handleString">handle you'd like</label>
-      <input type="text" id="handleString" name="handleString" required />
+    <form onSubmit={handleSubmit} className={styles.form}>
+      <div className={styles.formRow}>
+        <label htmlFor="handleString">handle you'd like</label>
+        <input type="text" id="handleString" name="handleString" required />
+      </div>
 
-      <label htmlFor="didString">did</label>
-      <input type="text" id="didString" name="didString" required />
+      <div className={styles.formRow}>
+        <label htmlFor="didString">did</label>
+        <input type="text" id="didString" name="didString" required />
+      </div>
 
       <p aria-live="polite">{message}</p>
 

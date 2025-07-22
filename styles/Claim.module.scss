@@ -1,0 +1,31 @@
+.smallerGap {
+  gap: 10px;
+}
+
+.form {
+
+  label,
+  input {
+    display: block;
+  }
+
+  label {
+    margin-bottom: var(--space-s);
+  }
+
+  input[type="text"] {
+    padding: var(--textFrameY);
+
+    font-family: var(--font-body);
+    font-size: var(--font-size);
+    font-weight: 500 !important;
+    line-height: 1;
+
+    background-color: var(--color-form-input-background);
+    border: 2px solid var(--color-form-input-border);
+  }
+}
+
+.formRow {
+  margin-bottom: var(--space);
+}
