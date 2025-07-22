@@ -15,6 +15,7 @@ export function HandleForm({ rootDomain }: HandleFormProps) {
   const [errors, setErrors] = useState<string[]>([]);
   const [isPending, startTransition] = useTransition();
   const [handleString, setHandleString] = useState("");
+  const [showForm, setShowForm] = useState(false);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -46,6 +47,27 @@ export function HandleForm({ rootDomain }: HandleFormProps) {
       .replace(/[^a-z0-9-]/g, "");
     setHandleString(sanitizedValue);
   };
+
+  if (!showForm) {
+    return (
+      <div className="sectionMargin textContent">
+        <p>
+          your current handle is <span className="bold">gunch.plunch</span>
+        </p>
+        <p>
+          <Button
+            onClick={() => {
+              setShowForm((prev) => {
+                return !prev;
+              });
+            }}
+          >
+            Edit Handle
+          </Button>
+        </p>
+      </div>
+    );
+  }
 
   return (
     <form
@@ -109,9 +131,22 @@ export function HandleForm({ rootDomain }: HandleFormProps) {
         </ul>
       )}
 
-      <Button type="submit" disabled={isPending}>
-        Claim Handle
-      </Button>
+      <div className="flexRow">
+        <Button type="submit" disabled={isPending}>
+          Claim Handle
+        </Button>
+
+        <Button
+          onClick={() => {
+            setShowForm((prev) => {
+              return !prev;
+            });
+          }}
+          outlined
+        >
+          Cancel Edit
+        </Button>
+      </div>
     </form>
   );
 }
