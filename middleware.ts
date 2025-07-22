@@ -74,7 +74,10 @@ export async function middleware(request: NextRequest) {
     // should resolve to the user's public DID document.
     if (pathname === "/.well-known/atproto-did") {
       return NextResponse.rewrite(
-        new URL(`/hostnameSpecific/${rootDomain}/${subdomain}`, request.url)
+        new URL(
+          `/hostnameSpecific/${rootDomain}/didResolver/${subdomain}`,
+          request.url
+        )
       );
     }
 
