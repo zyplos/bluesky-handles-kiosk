@@ -10,6 +10,7 @@ import styles from "./styles.module.scss";
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   outlined?: boolean;
   small?: boolean;
+  variant?: "alt";
 }
 
 export function Button({
@@ -17,6 +18,7 @@ export function Button({
   children,
   outlined = false,
   small = false,
+  variant,
   ...props
 }: ButtonProps) {
   return (
@@ -27,6 +29,7 @@ export function Button({
           styles.button,
           outlined && styles.outlined,
           small && styles.small,
+          variant && styles[variant],
           className
         )}
         {...props}

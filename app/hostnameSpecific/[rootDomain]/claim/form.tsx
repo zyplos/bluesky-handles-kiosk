@@ -143,6 +143,7 @@ export function HandleForm({ rootDomain }: HandleFormProps) {
             });
           }}
           outlined
+          variant="alt"
         >
           Cancel Edit
         </Button>

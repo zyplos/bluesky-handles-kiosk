@@ -48,6 +48,13 @@
   }
 }
 
+.alt {
+  --color-button-background: var(--color-button-alt-background);
+  --color-button-text: var(--color-button-alt-text);
+  --color-button-hover-background: var(--color-button-alt-hover-background);
+  --color-button-active-background: var(--color-button-alt-active-background);
+}
+
 .small {
   padding: 10px;
 }
