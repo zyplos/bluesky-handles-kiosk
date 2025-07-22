@@ -10,6 +10,11 @@
   }
 
   label {
+    font-weight: var(--font-weight-bold);
+  }
+
+  label,
+  .hint {
     margin-bottom: var(--space-s);
   }
 
@@ -18,11 +23,15 @@
 
     font-family: var(--font-body);
     font-size: var(--font-size);
-    font-weight: 500 !important;
+    font-weight: 400 !important;
     line-height: 1;
 
     background-color: var(--color-form-input-background);
     border: 2px solid var(--color-form-input-border);
+
+    &:focus {
+      background-color: var(--color-form-input-background-focused);
+    }
   }
 }
 

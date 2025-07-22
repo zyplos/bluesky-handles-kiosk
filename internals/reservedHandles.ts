@@ -9,6 +9,9 @@ const RESERVED = [
   "sonic",
   "kirby",
   "link",
+  "example",
+  "handle",
+  "handles",
 
   // Technical and Service-Related
   "ftp", // File Transfer Protocol

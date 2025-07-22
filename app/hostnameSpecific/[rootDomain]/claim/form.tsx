@@ -3,8 +3,13 @@
 import { useState, useTransition } from "react";
 import { Button } from "@/components/Button";
 import styles from "@/styles/Claim.module.scss";
+import clsx from "clsx";
 
-export function HandleForm() {
+interface HandleFormProps {
+  rootDomain: string;
+}
+
+export function HandleForm({ rootDomain }: HandleFormProps) {
   const [message, setMessage] = useState("");
   const [errors, setErrors] = useState<string[]>([]);
   const [isPending, startTransition] = useTransition();
@@ -33,14 +38,34 @@ export function HandleForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className={styles.form}>
+    <form
+      onSubmit={handleSubmit}
+      className={clsx(styles.form, "sectionMargin")}
+    >
       <div className={styles.formRow}>
         <label htmlFor="handleString">handle you'd like</label>
-        <input type="text" id="handleString" name="handleString" required />
+        <p className={styles.hint}>
+          Letters, numbers, and dashes (-) only. No unicode.
+        </p>
+        <div className="flexRow">
+          <input type="text" id="handleString" name="handleString" required />
+          <p>.{rootDomain}</p>
+        </div>
       </div>
 
       <div className={styles.formRow}>
         <label htmlFor="didString">did</label>
+        <p className={styles.hint}>
+          You can find this under{" "}
+          <a
+            href="https://bsky.app/settings/account"
+            target="_blank"
+            rel="noopener"
+          >
+            Settings {">"} Account {">"} Handle {">"} "I have my own domain"{" "}
+            {">"} No DNS Panel
+          </a>
+        </p>
         <input type="text" id="didString" name="didString" required />
       </div>
 
@@ -55,7 +80,7 @@ export function HandleForm() {
       )}
 
       <Button type="submit" disabled={isPending}>
-        claim handle
+        Claim Handle
       </Button>
     </form>
   );
