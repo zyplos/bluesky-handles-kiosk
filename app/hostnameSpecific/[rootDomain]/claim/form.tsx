@@ -57,7 +57,7 @@ export function HandleForm({ rootDomain, claimData }: HandleFormProps) {
       <div className="sectionMargin textContent">
         {claimData ? (
           <p>
-            Your current handle is{" "}
+            Your current claimed handle is{" "}
             <span className="bold">
               {claimData.handle}.{rootDomain}
             </span>
@@ -73,7 +73,7 @@ export function HandleForm({ rootDomain, claimData }: HandleFormProps) {
               });
             }}
           >
-            {claimData ? "Edit Claimed" : "Claim"} Handle
+            {claimData ? "Edit Claimed" : "Claim a"} Handle
           </Button>
         </p>
       </div>

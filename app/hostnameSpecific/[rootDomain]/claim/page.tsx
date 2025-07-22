@@ -55,7 +55,7 @@ export default async function DashboardPage({
 
   return (
     <MainLayout hostname={rootDomain}>
-      <h1 className="bottomSpaceMargin">claim a handle</h1>
+      <h1 className="bottomSpaceMargin">Claim a Handle</h1>
 
       <div
         className={clsx(
@@ -64,7 +64,7 @@ export default async function DashboardPage({
           styles.formRow
         )}
       >
-        <p>signed in as</p>{" "}
+        <p>Signed in as</p>{" "}
         {user.image && (
           <Image
             src={user.image}
@@ -81,9 +81,9 @@ export default async function DashboardPage({
       <HandleForm rootDomain={rootDomain} claimData={claimData} />
 
       <div className="textContent">
-        <h2>how do i use my claimed handle?</h2>
+        <h2>How do I use my claimed handle?</h2>
         <p>
-          you'll need to go to Bluesky and go to{" "}
+          You will need to go to Bluesky and go to{" "}
           <a
             href="https://bsky.app/settings/account"
             target="_blank"
@@ -108,8 +108,9 @@ export default async function DashboardPage({
           <span className="bold">
             {claimData?.handle || "<your handle>"}.{rootDomain}
           </span>{" "}
-          and click "Verify Text File" for Bluesky to verify that you have
-          claimed the domain with your did.
+          and click "Verify Text File" for Bluesky to contact this site and
+          verify that you have claimed the handle with the did id assigned to
+          your Bluesky account.
         </p>
       </div>
     </MainLayout>
