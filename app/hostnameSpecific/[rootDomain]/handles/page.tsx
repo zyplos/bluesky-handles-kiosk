@@ -14,7 +14,7 @@ export default async function HandlesAboutPage({
   return (
     <MainLayout hostname={rootDomain}>
       <div className="textContent">
-        <h1>claim a handle</h1>
+        <h1>bluesky handles?</h1>
 
         <p>
           this website has been set up to let you claim a bluesky handle (such

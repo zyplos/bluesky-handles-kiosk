@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { Button } from "@/components/Button";
 
 export function HandleForm() {
   const [message, setMessage] = useState("");
@@ -31,9 +32,7 @@ export function HandleForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>i'm in the box</h2>
-
+    <form onSubmit={handleSubmit} className="textContent">
       <label htmlFor="handleString">handle you'd like</label>
       <input type="text" id="handleString" name="handleString" required />
 
@@ -50,9 +49,9 @@ export function HandleForm() {
         </ul>
       )}
 
-      <button type="submit" disabled={isPending}>
+      <Button type="submit" disabled={isPending}>
         claim handle
-      </button>
+      </Button>
     </form>
   );
 }

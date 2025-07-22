@@ -1,21 +1,23 @@
+import { redirect } from "next/navigation";
 import { auth } from "@/internals/auth";
 import type { HostnameSpecificPageProps } from "@/internals/utils";
-import { redirect } from "next/navigation";
+import { MainLayout } from "@/components/MainLayout";
 import { HandleForm } from "./form";
 
 export default async function DashboardPage({
   params,
 }: HostnameSpecificPageProps) {
+  const { rootDomain } = await params;
   const session = await auth();
   if (!session) {
     return redirect("/");
   }
 
   return (
-    <div>
-      <h1>dash bord</h1>
+    <MainLayout hostname={rootDomain}>
+      <h1 className="bottomSpaceMargin">claim a handle</h1>
 
       <HandleForm />
-    </div>
+    </MainLayout>
   );
 }
