@@ -22,6 +22,13 @@ const errorMap: { [key: string]: React.ReactElement } = {
     </p>
   ),
   TimedOut: <p>Sorry, your session timed out. You'll need to sign in again.</p>,
+  NoId: (
+    <p>
+      Sorry, your session was invalid. Try signing in again. If this keeps
+      happening, please contact the site admin and give them this error code:{" "}
+      <code>NoId</code>
+    </p>
+  ),
   Default: (
     <p>
       An unexpected error happened trying to sign you in. If this keeps

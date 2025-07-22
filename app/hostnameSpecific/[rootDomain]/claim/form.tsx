@@ -2,19 +2,23 @@
 
 import { useState, useTransition } from "react";
 import clsx from "clsx";
-import { Button } from "@/components/Button";
+
+import type { ClaimData } from "@/internals/apiTypes";
 import { isStringEmpty } from "@/internals/utils";
+
+import { Button } from "@/components/Button";
 import styles from "@/styles/Claim.module.scss";
 
 interface HandleFormProps {
   rootDomain: string;
+  claimData: ClaimData | null;
 }
 
-export function HandleForm({ rootDomain }: HandleFormProps) {
+export function HandleForm({ rootDomain, claimData }: HandleFormProps) {
   const [message, setMessage] = useState("");
   const [errors, setErrors] = useState<string[]>([]);
   const [isPending, startTransition] = useTransition();
-  const [handleString, setHandleString] = useState("");
+  const [handleString, setHandleString] = useState(claimData?.handle || "");
   const [showForm, setShowForm] = useState(false);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -42,18 +46,25 @@ export function HandleForm({ rootDomain }: HandleFormProps) {
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     // Based on your hint, we can also enforce the rules here
-    const sanitizedValue = event.target.value
-      .toLowerCase()
-      .replace(/[^a-z0-9-]/g, "");
-    setHandleString(sanitizedValue);
+    // const sanitizedValue = event.target.value
+    //   .toLowerCase()
+    //   .replace(/[^a-z0-9-]/g, "");
+    setHandleString(event.target.value);
   };
 
   if (!showForm) {
     return (
       <div className="sectionMargin textContent">
-        <p>
-          your current handle is <span className="bold">gunch.plunch</span>
-        </p>
+        {claimData ? (
+          <p>
+            Your current handle is{" "}
+            <span className="bold">
+              {claimData.handle}.{rootDomain}
+            </span>
+          </p>
+        ) : (
+          <p>You haven't claimed a handle yet.</p>
+        )}
         <p>
           <Button
             onClick={() => {
@@ -62,7 +73,7 @@ export function HandleForm({ rootDomain }: HandleFormProps) {
               });
             }}
           >
-            Edit Handle
+            {claimData ? "Edit Claimed" : "Claim"} Handle
           </Button>
         </p>
       </div>
@@ -92,9 +103,14 @@ export function HandleForm({ rootDomain }: HandleFormProps) {
           autoComplete="off"
         />
         <p className="textMuted">
+          {claimData && (
+            <>
+              Your current handle is {claimData.handle}.{rootDomain}.{" "}
+            </>
+          )}
           {!isStringEmpty(handleString) && (
             <>
-              Your handle will be{" "}
+              Your {claimData && "new"} handle will be{" "}
               <span className={clsx("bold", styles.wordBreak)}>
                 {handleString}.{rootDomain}
               </span>
@@ -116,7 +132,13 @@ export function HandleForm({ rootDomain }: HandleFormProps) {
             {">"} No DNS Panel
           </a>
         </p>
-        <input type="text" id="didString" name="didString" required />
+        <input
+          type="text"
+          id="didString"
+          name="didString"
+          required
+          defaultValue={claimData?.did || ""}
+        />
       </div>
 
       <p aria-live="polite" className="bottomSpaceMargin">
@@ -145,7 +167,7 @@ export function HandleForm({ rootDomain }: HandleFormProps) {
           outlined
           variant="alt"
         >
-          Cancel Edit
+          Cancel
         </Button>
       </div>
     </form>

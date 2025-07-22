@@ -1,11 +1,16 @@
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import clsx from "clsx";
-import { auth } from "@/internals/auth";
+
 import type { HostnameSpecificPageProps } from "@/internals/utils";
-import { MainLayout } from "@/components/MainLayout";
+import type { ClaimData } from "@/internals/apiTypes";
+import { auth } from "@/internals/auth";
+import { executeQuery } from "@/internals/db";
 import { HandleForm } from "./form";
+
+import { MainLayout } from "@/components/MainLayout";
 import { SignOutButton } from "@/components/SignOutButton";
+
 import styles from "@/styles/Claim.module.scss";
 import handleDialogImg from "./handle-dialog.png";
 
@@ -18,6 +23,34 @@ export default async function DashboardPage({
 
   if (!session || !user) {
     return redirect("/");
+  }
+
+  if (!user.id) {
+    return redirect("/auth/signin?error=NoId");
+  }
+
+  let claimData: ClaimData | null = null;
+  try {
+    // returns [] on success
+    const results = await executeQuery<ClaimData>(
+      `SELECT 
+        discord_id,
+        handle,
+        did,
+        hostname,
+        date_claimed
+      FROM claims WHERE discord_id=$1 AND hostname=$2`,
+      [user.id, rootDomain]
+    );
+
+    if (results.length > 0) {
+      claimData = results[0];
+    }
+  } catch (error) {
+    console.error(
+      "unexpected error grabbing current user's existing claim",
+      error
+    );
   }
 
   return (
@@ -45,7 +78,7 @@ export default async function DashboardPage({
         <SignOutButton />
       </div>
 
-      <HandleForm rootDomain={rootDomain} />
+      <HandleForm rootDomain={rootDomain} claimData={claimData} />
 
       <div className="textContent">
         <h2>how do i use my claimed handle?</h2>
@@ -73,7 +106,7 @@ export default async function DashboardPage({
         <p>
           In the "Enter the domain you want to use" textbox, enter{" "}
           <span className="bold">
-            {"<your handle>"}.{rootDomain}
+            {claimData?.handle || "<your handle>"}.{rootDomain}
           </span>{" "}
           and click "Verify Text File" for Bluesky to verify that you have
           claimed the domain with your did.
