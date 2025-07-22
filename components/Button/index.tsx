@@ -7,14 +7,28 @@ import Link, { type LinkProps } from "next/link";
 import clsx from "clsx";
 import styles from "./styles.module.scss";
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {}
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  outlined?: boolean;
+  small?: boolean;
+}
 
-export function Button({ className, children, ...props }: ButtonProps) {
+export function Button({
+  className,
+  children,
+  outlined = false,
+  small = false,
+  ...props
+}: ButtonProps) {
   return (
     <>
       <button
         type="button"
-        className={clsx(styles.button, className)}
+        className={clsx(
+          styles.button,
+          outlined && styles.outlined,
+          small && styles.small,
+          className
+        )}
         {...props}
       >
         {children}

@@ -31,6 +31,27 @@
   }
 }
 
+.outlined {
+  background-color: transparent;
+  border: 2px solid var(--color-button-background);
+  color: var(--color-button-background);
+
+  &:hover {
+    background-color: var(--color-button-background);
+    color: var(--color-button-text);
+  }
+
+  &:active {
+    background-color: var(--color-button-active-background);
+    border: 2px solid var(--color-button-active-background);
+    color: var(--color-button-text);
+  }
+}
+
+.small {
+  padding: 10px;
+}
+
 .button:disabled {
   background-color: var(--color-muted);
   cursor: default;

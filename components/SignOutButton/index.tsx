@@ -1,6 +1,5 @@
 import { signOut } from "@/internals/auth";
 import { Button } from "../Button";
-import styles from "./styles.module.scss";
 
 export function SignOutButton() {
   return (
@@ -10,7 +9,7 @@ export function SignOutButton() {
         await signOut();
       }}
     >
-      <Button type="submit" className={styles.small}>
+      <Button type="submit" outlined small>
         Sign Out
       </Button>
     </form>
