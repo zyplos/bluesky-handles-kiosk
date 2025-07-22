@@ -110,6 +110,12 @@ export async function middleware(request: NextRequest) {
         new URL(`/hostnameSpecific/${rootDomain}/handles`, request.url)
       );
     }
+
+    if (pathname === "/claim") {
+      return NextResponse.rewrite(
+        new URL(`/hostnameSpecific/${rootDomain}/claim`, request.url)
+      );
+    }
   }
 
   // Allow all other requests to proceed without a rewrite.
