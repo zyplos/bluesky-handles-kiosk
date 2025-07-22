@@ -30,7 +30,9 @@ export default async function SubdomainPage({ params }: PageProps) {
       </CenteredContent>
 
       <FooterContent>
-        {!user && <PageButton href="/about">Claim a Bluesky Handle</PageButton>}
+        {!user && (
+          <PageButton href="/handles">Claim a Bluesky Handle</PageButton>
+        )}
         {/*  */}
         {user && (
           <>
