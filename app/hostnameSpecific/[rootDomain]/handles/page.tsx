@@ -14,16 +14,18 @@ export default async function HandlesAboutPage({
   return (
     <MainLayout hostname={rootDomain}>
       <div className="textContent">
-        <h1>bluesky handles?</h1>
+        <h1>Bluesky handles?</h1>
 
         <p>
-          this website has been set up to let you claim a bluesky handle (such
-          as <span className="bold">me.{rootDomain}</span>).
+          This website has been set up to let you claim a custom Bluesky
+          username (such as <span className="bold">me.{rootDomain}</span>).
         </p>
 
         <p>
-          sign in with Discord and, if you're on the allowlist, claim a handle
-          to use on Bluesky.
+          To prevent automated abuse, you must sign in with Discord to claim a
+          handle. If you'd like a Bluesky username that ends in{" "}
+          <span className="bold">{rootDomain}</span>, then sign in first to get
+          started!
         </p>
 
         <p>
