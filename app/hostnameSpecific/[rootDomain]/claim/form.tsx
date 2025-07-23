@@ -8,6 +8,7 @@ import { isStringEmpty } from "@/internals/utils";
 
 import { Button } from "@/components/Button";
 import styles from "@/styles/Claim.module.scss";
+import Alert from "@/components/Alert";
 
 interface HandleFormProps {
   rootDomain: string;
@@ -45,10 +46,6 @@ export function HandleForm({ rootDomain, claimData }: HandleFormProps) {
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // Based on your hint, we can also enforce the rules here
-    // const sanitizedValue = event.target.value
-    //   .toLowerCase()
-    //   .replace(/[^a-z0-9-]/g, "");
     setHandleString(event.target.value);
   };
 
@@ -141,17 +138,21 @@ export function HandleForm({ rootDomain, claimData }: HandleFormProps) {
         />
       </div>
 
-      <p aria-live="polite" className="bottomSpaceMargin">
-        {message}
-      </p>
+      <div className={styles.formRow}>
+        <p aria-live="polite" className="bottomSpaceMargin">
+          {message}
+        </p>
 
-      {errors.length > 0 && (
-        <ul className="bottomSpaceMargin">
-          {errors.map((error) => (
-            <li key={error}>{error}</li>
-          ))}
-        </ul>
-      )}
+        {errors.length > 0 && (
+          <Alert variant="danger">
+            <ul className={styles.formList}>
+              {errors.map((error) => (
+                <li key={error}>{error}</li>
+              ))}
+            </ul>
+          </Alert>
+        )}
+      </div>
 
       <div className="flexRow">
         <Button type="submit" disabled={isPending}>
