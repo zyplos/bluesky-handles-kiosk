@@ -1,4 +1,5 @@
 import type { NextPageProps } from "@/internals/utils";
+import Alert from "@/components/Alert";
 import AuthErrorNotice from "@/components/AuthErrorNotice";
 import { MainLayout } from "@/components/MainLayout";
 import { PageButton } from "@/components/Button";
@@ -10,7 +11,10 @@ export default async function AuthErrorPage({ searchParams }: NextPageProps) {
     <MainLayout hostname="">
       <div className="textContent">
         <h1>oops</h1>
-        <AuthErrorNotice error={error} />
+
+        <Alert variant="danger">
+          <AuthErrorNotice error={error} />
+        </Alert>
 
         <p>
           <PageButton href="/">Home</PageButton>
