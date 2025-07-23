@@ -75,8 +75,14 @@
 
   // components
 
+  --color-alert-neutral-text: #292222;
+  --color-alert-neutral-background: #fdf4f4;
+
   --color-alert-info-text: #fff;
-  --color-alert-info-bg: #fc6603;
+  --color-alert-info-background: #fc6603;
+
+  --color-alert-danger-text: #fff;
+  --color-alert-danger-background: #ff3e3e;
 
   --color-button-background: #ff3e3e;
   --color-button-text: #fff;
@@ -114,8 +120,14 @@
 
   // components
 
-  --color-alert-info-text: #fff;
-  --color-alert-info-bg: #4265b1;
+  --color-alert-neutral-text: #fff;
+  --color-alert-neutral-background: #4a403e;
+
+  --color-alert-info-text: #fff5f5;
+  --color-alert-info-background: #4265b1;
+
+  --color-alert-danger-text: #fff5f5;
+  --color-alert-danger-background: #ff3e3e;
 
   --color-button-background: #ff3e3e;
   --color-button-text: #fff;
