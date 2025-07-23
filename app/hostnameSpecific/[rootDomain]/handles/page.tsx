@@ -36,6 +36,17 @@ export default async function HandlesAboutPage({
         {user && <PageButton href="/claim">Claim Handle</PageButton>}
       </div>
 
+      <p className="bottomSpaceMargin">
+        You can find this on the Bluesky site by going to{" "}
+        <a
+          href="https://bsky.app/settings/account"
+          target="_blank"
+          rel="noopener"
+        >
+          Settings {">"} Account {">"} Handle {">"} "I have my own domain" {">"}{" "}
+          No DNS Panel
+        </a>
+      </p>
       <Image
         src={handleDialogImg}
         alt={`A dialog titled "Change Handle" on the Bluesky site`}
