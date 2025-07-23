@@ -1,18 +1,21 @@
-import Link from "next/link";
 import type { NextPageProps } from "@/internals/utils";
 import AuthErrorNotice from "@/components/AuthErrorNotice";
+import { MainLayout } from "@/components/MainLayout";
+import { PageButton } from "@/components/Button";
 
 export default async function AuthErrorPage({ searchParams }: NextPageProps) {
   const error = ((await searchParams).error as string | undefined) || "Default";
 
   return (
-    <div>
-      <h1>oops</h1>
-      <div>
+    <MainLayout hostname="">
+      <div className="textContent">
+        <h1>oops</h1>
         <AuthErrorNotice error={error} />
-      </div>
 
-      <Link href="/">home</Link>
-    </div>
+        <p>
+          <PageButton href="/">Home</PageButton>
+        </p>
+      </div>
+    </MainLayout>
   );
 }
