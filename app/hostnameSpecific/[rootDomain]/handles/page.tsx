@@ -13,7 +13,7 @@ export default async function HandlesAboutPage({
 
   return (
     <MainLayout hostname={rootDomain}>
-      <div className="textContent">
+      <div className="textContent bottomSpaceMargin">
         <h1>Bluesky handles?</h1>
 
         <p>
@@ -27,13 +27,10 @@ export default async function HandlesAboutPage({
           <span className="bold">{rootDomain}</span>, then sign in first to get
           started!
         </p>
-
-        <p>
-          {!user && <SignInButton />}
-          {/*  */}
-          {user && <PageButton href="/claim">Claim Handle</PageButton>}
-        </p>
       </div>
+
+      {!user && <SignInButton />}
+      {user && <PageButton href="/claim">Claim Handle</PageButton>}
     </MainLayout>
   );
 }
