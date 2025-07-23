@@ -74,6 +74,13 @@ a {
   color: var(--color-link);
 }
 
+video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border-radius: var(--radius);
+}
+
 // ===== global classes
 .monospace {
   font-family: var(--font-monospace);

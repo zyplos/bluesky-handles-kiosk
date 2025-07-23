@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { auth } from "@/internals/auth";
-import type { HostnameSpecificPageProps } from "@/internals/utils";
+import { rootDomains, type HostnameSpecificPageProps } from "@/internals/utils";
 import { PageButton } from "@/components/Button";
 import {
   CenteredContent,
@@ -8,6 +8,8 @@ import {
   HomeLayout,
 } from "@/components/HomeLayout";
 import { SignOutButton } from "@/components/SignOutButton";
+import HostnameLandingContent from "@/components/HostnameLandingContent";
+import Alert from "@/components/Alert";
 
 export default async function SubdomainPage({
   params,
@@ -19,7 +21,12 @@ export default async function SubdomainPage({
   return (
     <HomeLayout hostname={rootDomain}>
       <CenteredContent>
-        <h1>home page {rootDomain}</h1>
+        {!rootDomains.includes(rootDomain) && (
+          <Alert variant="info" className="bottomSpaceMargin">
+            <span className="bold">{rootDomain}</span> is not in env.rootDomains
+          </Alert>
+        )}
+        <HostnameLandingContent rootDomain={rootDomain} />
       </CenteredContent>
 
       <FooterContent>
@@ -44,7 +51,9 @@ export default async function SubdomainPage({
 
               <SignOutButton />
             </div>
-            <PageButton href="/handles">Claim Handle</PageButton>
+            <PageButton href="/handles" style={{ marginLeft: "auto" }}>
+              Claim Handle
+            </PageButton>
           </>
         )}
       </FooterContent>

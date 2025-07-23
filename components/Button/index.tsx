@@ -42,7 +42,9 @@ export function Button({
 
 //
 
-interface PageButtonProps extends LinkProps {
+interface PageButtonProps
+  extends LinkProps,
+    React.HTMLAttributes<HTMLAnchorElement> {
   children: ReactNode;
   className?: string;
 }
@@ -51,6 +53,7 @@ export function PageButton({
   href,
   className,
   children,
+  style,
   ...props
 }: PageButtonProps) {
   return (
