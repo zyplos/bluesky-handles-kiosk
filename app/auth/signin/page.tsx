@@ -1,8 +1,13 @@
+import type { Metadata } from "next";
 import type { NextPageProps } from "@/internals/utils";
 import Alert from "@/components/Alert";
 import SignInButton from "@/components/SignInButton";
 import AuthErrorNotice from "@/components/AuthErrorNotice";
 import { MainLayout } from "@/components/MainLayout";
+
+export const metadata: Metadata = {
+  title: "Sign In",
+};
 
 export default async function SignInPage({ searchParams }: NextPageProps) {
   const error = (await searchParams).error as string | undefined;

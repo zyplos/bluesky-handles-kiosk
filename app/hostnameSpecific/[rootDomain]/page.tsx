@@ -1,4 +1,5 @@
 import Image from "next/image";
+import type { Metadata } from "next";
 import { auth } from "@/internals/auth";
 import { rootDomains, type HostnameSpecificPageProps } from "@/internals/utils";
 import { PageButton } from "@/components/Button";
@@ -10,6 +11,16 @@ import {
 import { SignOutButton } from "@/components/SignOutButton";
 import HostnameLandingContent from "@/components/HostnameLandingContent";
 import Alert from "@/components/Alert";
+
+export async function generateMetadata({
+  params,
+}: HostnameSpecificPageProps): Promise<Metadata> {
+  const rootDomain = (await params).rootDomain;
+
+  return {
+    title: `@${rootDomain}`,
+  };
+}
 
 export default async function SubdomainPage({
   params,

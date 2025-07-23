@@ -1,10 +1,21 @@
 import Image from "next/image";
-import { auth } from "@/internals/auth";
+import type { Metadata } from "next";
 import type { HostnameSpecificPageProps } from "@/internals/utils";
+import { auth } from "@/internals/auth";
 import { MainLayout } from "@/components/MainLayout";
 import SignInButton from "@/components/SignInButton";
 import { PageButton } from "@/components/Button";
 import handleDialogImg from "../claim/handle-dialog.png";
+
+export async function generateMetadata({
+  params,
+}: HostnameSpecificPageProps): Promise<Metadata> {
+  const rootDomain = (await params).rootDomain;
+
+  return {
+    title: `Handles - @${rootDomain}`,
+  };
+}
 
 export default async function HandlesAboutPage({
   params,

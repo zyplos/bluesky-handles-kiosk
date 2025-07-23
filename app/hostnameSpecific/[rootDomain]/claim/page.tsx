@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import clsx from "clsx";
+import type { Metadata } from "next";
 
 import type { HostnameSpecificPageProps } from "@/internals/utils";
 import type { ClaimData } from "@/internals/apiTypes";
@@ -13,6 +14,16 @@ import { SignOutButton } from "@/components/SignOutButton";
 
 import styles from "@/styles/Claim.module.scss";
 import handleDialogImg from "./handle-dialog.png";
+
+export async function generateMetadata({
+  params,
+}: HostnameSpecificPageProps): Promise<Metadata> {
+  const rootDomain = (await params).rootDomain;
+
+  return {
+    title: `Claim Handle - @${rootDomain}`,
+  };
+}
 
 export default async function DashboardPage({
   params,
