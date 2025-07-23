@@ -1,8 +1,10 @@
+import Image from "next/image";
 import { auth } from "@/internals/auth";
 import type { HostnameSpecificPageProps } from "@/internals/utils";
 import { MainLayout } from "@/components/MainLayout";
 import SignInButton from "@/components/SignInButton";
 import { PageButton } from "@/components/Button";
+import handleDialogImg from "../claim/handle-dialog.png";
 
 export default async function HandlesAboutPage({
   params,
@@ -24,13 +26,21 @@ export default async function HandlesAboutPage({
         <p>
           To prevent automated abuse, you must sign in with Discord to claim a
           handle. If you'd like a Bluesky username that ends in{" "}
-          <span className="bold">{rootDomain}</span>, then sign in first to get
+          <span className="bold">{rootDomain}</span>, then sign in to get
           started!
         </p>
       </div>
 
-      {!user && <SignInButton />}
-      {user && <PageButton href="/claim">Claim Handle</PageButton>}
+      <div className="paragraphMargin">
+        {!user && <SignInButton />}
+        {user && <PageButton href="/claim">Claim Handle</PageButton>}
+      </div>
+
+      <Image
+        src={handleDialogImg}
+        alt={`A dialog titled "Change Handle" on the Bluesky site`}
+        className="fluidImg"
+      />
     </MainLayout>
   );
 }

@@ -98,7 +98,7 @@ export default async function DashboardPage({
         <p>
           <Image
             src={handleDialogImg}
-            alt={`A dialog titled "Change Handle" on the Bluesky site"`}
+            alt={`A dialog titled "Change Handle" on the Bluesky site`}
             className="fluidImg"
           />
         </p>
