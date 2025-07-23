@@ -53,7 +53,6 @@ export function PageButton({
   href,
   className,
   children,
-  style,
   ...props
 }: PageButtonProps) {
   return (

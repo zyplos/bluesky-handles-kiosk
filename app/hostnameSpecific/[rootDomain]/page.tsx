@@ -31,7 +31,9 @@ export default async function SubdomainPage({
 
       <FooterContent>
         {!user && (
-          <PageButton href="/handles">Claim a Bluesky Handle</PageButton>
+          <PageButton href="/handles" style={{ marginLeft: "auto" }}>
+            Claim a Bluesky Handle
+          </PageButton>
         )}
         {/*  */}
         {user && (
@@ -51,9 +53,7 @@ export default async function SubdomainPage({
 
               <SignOutButton />
             </div>
-            <PageButton href="/handles" style={{ marginLeft: "auto" }}>
-              Claim Handle
-            </PageButton>
+            <PageButton href="/handles">Claim Handle</PageButton>
           </>
         )}
       </FooterContent>
