@@ -16,9 +16,9 @@ export default async function Home() {
         <h1>not configured!</h1>
         <p>zyplos/bluesky-handles-kiosk/wiki/setup</p>
       </CenteredContent>
-      <FooterContent>
+      {process.env.NODE_ENV !== "production" && <FooterContent>
         <SignInButton />
-      </FooterContent>
+      </FooterContent>}
     </HomeLayout>
   );
 }
