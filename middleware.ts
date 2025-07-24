@@ -1,3 +1,4 @@
+// based off of https://github.com/vercel/platforms
 import { type NextRequest, NextResponse } from "next/server";
 import { rootDomains } from "@/internals/utils";
 
