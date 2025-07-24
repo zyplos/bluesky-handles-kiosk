@@ -51,7 +51,7 @@
   --radius-circle: 1000px;
 }
 
-// default theme colors
+// default fallback theme colors
 :root {
   color-scheme: light;
 
@@ -66,6 +66,46 @@
   // Alert
   --color-alert-neutral-text: #c3c7e5;
   --color-alert-neutral-background: #21232b;
+
+  --color-alert-info-text: #fff;
+  --color-alert-info-background: #d67c28;
+
+  --color-alert-danger-text: #fff;
+  --color-alert-danger-background: #ff3e3e;
+
+  // Button
+  --color-button-background: #003ef5;
+  --color-button-text: #fff;
+  --color-button-hover-background: #1f57ff;
+  --color-button-active-background: #0030be;
+
+  --color-button-alt-background: #623de9;
+  --color-button-alt-text: #fff;
+  --color-button-alt-hover-background: #7755f0;
+  --color-button-alt-active-background: #4b26d1;
+
+  // Form
+  --color-form-input-background: #d9dcec;
+  --color-form-input-background-focused: #e9eeff;
+  --color-form-input-border: #9198c7;
+}
+
+// example hostname specific theme
+// use #root selector for hostname specific themes
+#root[data-hostname="waypast.cool"] {
+  color-scheme: dark;
+
+  --color-text: #f8faff;
+  --color-background: #0a1041;
+
+  --color-muted: #6f7094;
+  --color-link: #a7bdff;
+
+  // components
+
+  // Alert
+  --color-alert-neutral-text: #f8faff;
+  --color-alert-neutral-background: #4f5675;
 
   --color-alert-info-text: #fff;
   --color-alert-info-background: #623de9;
@@ -85,7 +125,7 @@
   --color-button-alt-active-background: #4b26d1;
 
   // Form
-  --color-form-input-background: #d9dcec;
-  --color-form-input-focused: #d4d8f0;
-  --color-form-input-border: #9198c7;
+  --color-form-input-background: #192266;
+  --color-form-input-background-focused: #253083;
+  --color-form-input-border: #5661a1;
 }
