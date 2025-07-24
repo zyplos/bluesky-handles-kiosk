@@ -105,14 +105,15 @@ export function HandleForm({ rootDomain, claimData }: HandleFormProps) {
               Your current handle is {claimData.handle}.{rootDomain}.{" "}
             </>
           )}
-          {!isStringEmpty(handleString) && (
-            <>
-              Your {claimData && "new"} handle will be{" "}
-              <span className={clsx("bold", styles.wordBreak)}>
-                {handleString}.{rootDomain}
-              </span>
-            </>
-          )}
+          {!isStringEmpty(handleString) &&
+            claimData?.handle !== handleString && (
+              <>
+                Your {claimData && "new"} handle will be{" "}
+                <span className={clsx("bold", styles.wordBreak)}>
+                  {handleString}.{rootDomain}
+                </span>
+              </>
+            )}
         </p>
       </div>
 
