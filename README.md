@@ -2,7 +2,7 @@
 
 **bluesky-handles-kiosk** is a Next.js project that lets users claim Bluesky handles under a domain. This project is meant to be deployed on any domains you might have lying around that are going unused, but might make for a good Bluesky handle. Users sign in with Discord to claim a handle.
 
-Made with Next.js with Auth.js for user sign ins and PostgreSQL to store user data. Meant to be deployed on Vercel for easy setup.
+Made with Next.js with Auth.js for user sign ins and PostgreSQL to store user data. Meant to be deployed on Vercel for easy setup, allowing a single project deployment to serve multiple domains.
 
 ![about page on the site](./screenshot.png)
 
@@ -35,7 +35,7 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) in your browser. Edit `./app/page.tsx` and save to see the changes automatically reflected in your browser.
 
-This is a [Next.js](https://nextjs.org) project that was meant to be deployed on Vercel. For development purposes, while you're on `localhost`, you can freely visit any of the pages in `./app/hostnameSpecific/[rootDomain]` and put in any string for the hostname. In a production environment, users will be redirected to `/` so they cannot claim handles under any arbitrary hostname.
+This is a [Next.js](https://nextjs.org) project that is meant to be deployed on Vercel. For development purposes, while you're on `localhost`, you can freely visit any of the pages in `./app/hostnameSpecific/[rootDomain]` and put in any string for the hostname. In a production environment, users will be redirected to `/` so they cannot claim handles under any arbitrary hostname.
 
 ![default landing page for domains](./screenshot-dev.png)
 
@@ -43,7 +43,7 @@ Redirects may not work in your local development environment. You can manually v
 
 - `https://localhost:3000/hostnameSpecific/<your domain>/handles` - the about page
 - `https://localhost:3000/hostnameSpecific/<your domain>/claim` - the page with the form to let users claim a handle
-- `https://localhost:3000/hostnameSpecific/<your domain>/didResolver/<handle>` - the page that responds to requests for "https://<handle.domain_bluesky_looks_at>/.well-known/atproto-did"
+- `https://localhost:3000/hostnameSpecific/<your domain>/didResolver/<handle>` - the page that responds to requests for "https://\<handle>.\<domain bluesky looks at>/.well-known/atproto-did"
 
 Please refer to [`./middleware.ts`](https://github.com/zyplos/bluesky-handles-kiosk/blob/main/middleware.ts) to see how requests are rewritten.
 
