@@ -2,7 +2,7 @@
 
 **bluesky-handles-kiosk** is a Next.js project that lets users claim Bluesky handles under a domain. This project is meant to be deployed on any domains you might have lying around that are going unused, but might make for a good Bluesky handle. Users sign in with Discord to claim a handle.
 
-Made with Next.js with Auth.js for user sign ins and PostgreSQL to store user data.
+Made with Next.js with Auth.js for user sign ins and PostgreSQL to store user data. Meant to be deployed on Vercel for easy setup.
 
 ![about page on the site](./screenshot.png)
 
@@ -45,6 +45,6 @@ Redirects may not work in your local development environment. You can manually v
 - `https://localhost:3000/hostnameSpecific/<your domain>/claim` - the page with the form to let users claim a handle
 - `https://localhost:3000/hostnameSpecific/<your domain>/didResolver/<handle>` - the page that responds to requests for "https://<handle.domain_bluesky_looks_at>/.well-known/atproto-did"
 
-Please refer to [./middleware.ts](https://github.com/zyplos/bluesky-handles-kiosk/blob/main/middleware.ts) to see how requests are rewritten.
+Please refer to [`./middleware.ts`](https://github.com/zyplos/bluesky-handles-kiosk/blob/main/middleware.ts) to see how requests are rewritten.
 
 This project supports handling requests from multiple domains. If you'd like to customize the look and content of a specific domain, visit [the Customization wiki page](https://github.com/zyplos/bluesky-handles-kiosk/wiki/Customization) for more information.

@@ -20,7 +20,15 @@ export default async function Home() {
     <HomeLayout hostname="">
       <CenteredContent>
         <h1>not configured!</h1>
-        <p>zyplos/bluesky-handles-kiosk/wiki/setup</p>
+        <p>
+          <a
+            href="https://github.com/zyplos/bluesky-handles-kiosk/wiki/Project-Setup"
+            target="_blank"
+            rel="noopener"
+          >
+            zyplos/bluesky-handles-kiosk/wiki/Project-Setup
+          </a>
+        </p>
       </CenteredContent>
       {process.env.NODE_ENV !== "production" && (
         <FooterContent>
